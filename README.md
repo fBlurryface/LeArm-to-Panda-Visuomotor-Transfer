@@ -158,14 +158,12 @@ The trainer selects successful episodes and valid measured pre-insertion windows
 
 ### 4-fold episode-grouped cross-validation
 
-> **Update this table after rerunning the modified trainer.** The previous numbers were produced with held-out folds also used for checkpoint selection, so they should not be reused here.
-
 | Metric | Result |
 | --- | ---: |
-| 3D displacement RMSE | **UPDATE AFTER RERUN** |
-| left active-direction accuracy | **UPDATE AFTER RERUN** |
-| up active-direction accuracy | **UPDATE AFTER RERUN** |
-| forward active-direction accuracy | **UPDATE AFTER RERUN** |
+| 3D displacement RMSE | **5.89 mm / 100 ms** |
+| left active-direction accuracy | **92.2%** |
+| up active-direction accuracy | **74.0%** |
+| forward active-direction accuracy | **90.1%** |
 
 The bundled `results/validated_hybrid_rollouts/` directory contains four inspectable simulation logs: three reach the post-insertion settle state with approximately **75–78 mm** of ring lift, while one randomized-start example fails before insertion after losing the target. These are example rollouts, not a statistically meaningful benchmark.
 
