@@ -288,19 +288,23 @@ def main():
         Y = np.concatenate([episodes[e][1] for e in train_ids])
         XT = np.concatenate([episodes[e][0] for e in test_ids])
         YT = np.concatenate([episodes[e][1] for e in test_ids])
-        model, om, osd, am, asd, ne, bv = fit_model(X, Y, XT, YT, seed=100 + fi, max_epochs=140)
+
+        # Match the deployed model's fixed training recipe.
+        # Held-out episodes are used only for evaluation, never checkpoint selection.
+        model, om, osd, am, asd, ne, _ = fit_model(
+            X, Y, None, None, seed=100 + fi, max_epochs=120
+        )
         P = predict(model, (om, osd, am, asd), XT)
         fold_reports.append({
             'fold': fi,
             'train_episodes': train_ids,
             'test_episodes': test_ids,
             'epochs': ne,
-            'best_normalized_val_mse': bv,
             'metrics': metrics(P, YT),
         })
 
-    # Final model sees all successful episodes.  No validation early stop here; use a
-    # conservative fixed epoch count near the grouped-CV median.
+    # Final model sees all successful episodes and keeps the existing deployed recipe:
+    # fixed seed 42, fixed 120 epochs, no validation early stopping.
     Xall = np.concatenate([episodes[e][0] for e in ids])
     Yall = np.concatenate([episodes[e][1] for e in ids])
     final_model, om, osd, am, asd, ne, _ = fit_model(Xall, Yall, None, None, seed=42, max_epochs=120)
@@ -346,14 +350,14 @@ def main():
             'no pierced/post-blue-loss samples',
             'ring center is expressed relative to the measured blue terminal marker',
             'ring apparent size is normalized by first valid frame in each episode',
-            'actions are actual observed local tool translation, not teleop commands',
+            'actions are tool-local displacements reconstructed from the firmware-synchronised shadow reference trajectory, not teleoperation commands or encoder-measured motion',
             'no LeArm or Panda joint angles',
             'no rotation output in the learned pre-insertion policy',
             'horizontal mirror augmentation',
             'idle samples retained but active samples receive larger loss weight',
         ],
         'cross_validation': {
-            'type': '4-fold grouped by whole episode',
+            'type': '4-fold grouped by whole episode; fixed 120 epochs; held-out episodes used only for evaluation',
             'folds': fold_reports,
             'mean_vector_rmse_mm_per_100ms': float(np.mean(cv_vec)),
             'std_vector_rmse_mm_per_100ms': float(np.std(cv_vec)),

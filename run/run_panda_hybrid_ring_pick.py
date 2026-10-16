@@ -151,7 +151,7 @@ def main():
     print('\nPanda hybrid ring-pick policy')
     print('  learned from existing REAL successful LeArm data')
     print('  observation = ring center relative to measured blue terminal rod + relative ring scale')
-    print('  output = [left, up, forward] actual tool delta over 100 ms')
+    print('  output = [left, up, forward] shadow-reference tool delta over 100 ms')
     print('  rotations are forced to zero in this first experiment')
     print('  stable blue loss transitions to a robust lift dominated by whole-tool upward translation')
     print(f'  LIFT: up={args.lift_up_mm_s:.1f} mm/s, pitch={args.lift_pitch_deg_s:+.1f} deg/s, duration={args.lift_seconds:.2f}s')

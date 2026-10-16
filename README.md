@@ -93,8 +93,7 @@ ring_axis_ratio
 
 The network predicts $[\Delta L, \Delta U, \Delta F]$, corresponding to **left, up, and forward motion in the tool frame over the next ~100 ms**.
 
-
-The supervision targets are **not** the LeArm teleoperation commands. They are derived from the recorded tool trajectory over a 5-step horizon (~100 ms), then expressed in the canonical local tool frame. This is what makes the learned action meaningful to both LeArm and Panda.
+The supervision targets are **not** the LeArm teleoperation commands. They are reconstructed from the firmware-synchronised shadow tool trajectory over a 5-step horizon (~100 ms), then expressed in the canonical local tool frame. They are therefore reference-trajectory labels rather than encoder-measured physical motion. This is what makes the learned action meaningful to both LeArm and Panda.
 
 ```mermaid
 flowchart LR
@@ -157,14 +156,16 @@ The repository includes the complete structured logs for **24 personally collect
 
 The trainer selects successful episodes and valid measured pre-insertion windows internally, producing **8,252 samples**.
 
-### Grouped held-out training evaluation
+### 4-fold episode-grouped cross-validation
+
+> **Update this table after rerunning the modified trainer.** The previous numbers were produced with held-out folds also used for checkpoint selection, so they should not be reused here.
 
 | Metric | Result |
 | --- | ---: |
-| 3D displacement RMSE | **3.87 mm / 100 ms** |
-| left active-direction accuracy | **92.2%** |
-| up active-direction accuracy | **84.6%** |
-| forward active-direction accuracy | **97.0%** |
+| 3D displacement RMSE | **UPDATE AFTER RERUN** |
+| left active-direction accuracy | **UPDATE AFTER RERUN** |
+| up active-direction accuracy | **UPDATE AFTER RERUN** |
+| forward active-direction accuracy | **UPDATE AFTER RERUN** |
 
 The bundled `results/validated_hybrid_rollouts/` directory contains four inspectable simulation logs: three reach the post-insertion settle state with approximately **75–78 mm** of ring lift, while one randomized-start example fails before insertion after losing the target. These are example rollouts, not a statistically meaningful benchmark.
 

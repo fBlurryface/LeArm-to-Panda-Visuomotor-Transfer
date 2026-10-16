@@ -146,7 +146,7 @@ def main():
     print('\nLearned blue-relative pre-insertion policy')
     print('  learned from existing REAL successful LeArm data')
     print('  observation = ring center relative to measured blue terminal rod + relative ring scale')
-    print('  output = [left, up, forward] actual tool delta over 100 ms')
+    print('  output = [left, up, forward] shadow-reference tool delta over 100 ms')
     print('  rotations are forced to zero in this first experiment')
     print('  stable blue loss ends the test; there is NO learned or handcrafted lift here')
     print('  controller: reference-integrated Panda task-space motion layer')

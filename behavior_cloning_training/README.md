@@ -31,9 +31,9 @@ MLP: 5 → 64 → 64 → 32 → 3
 [Δleft, Δup, Δforward] over ~100 ms
 ```
 
-The action labels come from the recorded tool reference trajectory, not from LeArm teleoperation commands. Human-readable values are naturally interpreted in **mm / 100 ms**; the exported checkpoint stores meters plus `policy_dt_s = 0.1`.
+The action labels come from the firmware-synchronised shadow reference trajectory, not from LeArm teleoperation commands or encoder-measured physical motion. Human-readable values are naturally interpreted in **mm / 100 ms**; the exported checkpoint stores meters plus `policy_dt_s = 0.1`.
 
-Training uses normalization, horizontal mirror augmentation, SmoothL1 loss, and action-magnitude weighting.
+Training uses normalization, horizontal mirror augmentation, SmoothL1 loss, and action-magnitude weighting. Evaluation uses 4-fold cross-validation grouped by complete episode; every fold uses the same fixed 120-epoch training recipe as the deployed model, and held-out episodes are used only for evaluation.
 
 Exact feature equations and label construction are documented in [`../docs/technical_appendix.md`](../docs/technical_appendix.md).
 
